@@ -48,6 +48,23 @@ jobs:
           version=$(cat ./chart/charts/values.yaml | grep version: | awk '{print $2}')
           sed -i "s/$version/${GITHUB_REF##*/}-$git_hash/" ./chart/charts/values.yaml
 
+    - name: repository checkout
+      uses: actions/checkout@v2
+      with:
+        repository: Hyeong-Yun/nodeapp_test
+        token: ${{ secrets.MY_GITHUB_TOKEN }}
+        path: chart/charts
+
+    - name: Add date and push
+      run: |
+        GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
+        cd chart/charts
+        sed -i "10s/.*/  - image: $ECR_REGISTRY\/$ECR_REPOSITORY:$GIT_HASH/g" values.yaml
+        git add .
+        git config --global user.email "guddbs5545@naver.com"
+        git config --global user.name "hyeongyun"
+        git commit -am "Inject Tag"
+        git push
     
     # # Helm
     # - name: Install Helm
