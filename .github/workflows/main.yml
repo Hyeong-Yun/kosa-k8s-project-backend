@@ -53,12 +53,12 @@ jobs:
       with:
         repository: Hyeong-Yun/nodeapp_test
         token: ${{ secrets.MY_GITHUB_TOKEN }}
-        path: ../chart/charts
+        path: chart
 
     - name: Add date and push
       run: |
         GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
-        cd ../chart/charts
+        cd chart
         sed -i "10s/.*/  - version: $ECR_REGISTRY\/$ECR_REPOSITORY:$GIT_HASH/g" values.yaml
         git add .
         git config --global user.email "guddbs5545@naver.com"
