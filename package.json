@@ -1,17 +1,25 @@
 {
   "name": "node-app",
+  "type": "module",
   "description": "Nodeapp for CICD test",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "express": "4.17.1"
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "express": "4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "mocha": "9.1.1",
     "supertest": "6.1.6"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node app.js",
     "test": "./node_modules/.bin/mocha ./test/test.js"
   }
 }
