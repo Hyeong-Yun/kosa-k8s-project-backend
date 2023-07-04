@@ -53,7 +53,7 @@ jobs:
       with:
         repository: Hyeong-Yun/nodeapp_test
         token: ${{ secrets.MY_GITHUB_TOKEN }}
-        path: chart/charts
+        path: chart
 
     - name: Add date and push
       run: |
