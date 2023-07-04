@@ -58,8 +58,7 @@ jobs:
     - name: Add date and push
       run: |
         GIT_HASH=$(git rev-parse --short "$GITHUB_SHA")
-        cd chart
-        sed -i "10s/.*/  - version: $ECR_REGISTRY\/$ECR_REPOSITORY:$GIT_HASH/g" values.yaml
+        sed -i "10s/.*/  - version: $ECR_REGISTRY\/$ECR_REPOSITORY:$GIT_HASH/g" ./chart/charts/values.yaml
         git add .
         git config --global user.email "guddbs5545@naver.com"
         git config --global user.name "hyeongyun"
