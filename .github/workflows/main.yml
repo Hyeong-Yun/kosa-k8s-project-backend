@@ -1,33 +1,68 @@
-name: Publish Docker image
-
+---
+name : Build and Push react Image to AWS ECR
 on:
   push:
-    branches: ['master']
-
+    branches: [main]
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub
+  build-and-push:
+    name: Build and Push to ECR
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
-      
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-      
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
-        with:
-          images: thetips4you/testjodejsapp
-      
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    # - name: Automatic Tagging of Releases
+    #   id: increment-git-tag
+    #   run: |
+    #     bash ./build/git_update.sh -v major
+
+    - name: Build, Tag, and Push the Image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: express
+        # IMAGE_TAG: latest
+      run: |
+        # Build a docker container and push it to ECR
+        git_hash=$(git rev-parse --short "$GITHUB_SHA")
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}-$git_hash .
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}-$git_hash
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}-$git_hash"
+        
+    - name: Update Version
+      run: |
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+          version=$(cat ./chart/charts/values.yaml | grep version: | awk '{print $2}')
+          sed -i "s/$version/${GITHUB_REF##*/}-$git_hash/" ./chart/charts/values.yaml
+
+    
+    # # Helm
+    # - name: Install Helm
+    #   run: |
+    #     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+
+    # - name: Package Helm chart
+    #   run: |
+    #     helm package path/to/chart --version ${GITHUB_SHA:0:7}
+    #     mv path/to/chart-*.tgz mychart.tgz
+
+    # - name: Deploy with Argo CD
+    #   run: |
+    #     argocd app create myapp --repo <repository_url> --path <path_to_app> --dest-server https://kubernetes.default.svc --dest-namespace mynamespace --helm-set image.tag=${GITHUB_SHA:0:7} --sync-policy automated
+    #     argocd app sync myapp
+
+    # - name: Verify deployment
+    #   run: |
+    #     kubectl get pods --namespace mynamespace
