@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   pullPolicy: IfNotPresent
   repository: 578310434439.dkr.ecr.ap-northeast-2.amazonaws.com/cicd-test
-  version: master-f9f0759
+  version: master-9de6ba8
 
 imagePullSecrets: []
 nameOverride: ""
