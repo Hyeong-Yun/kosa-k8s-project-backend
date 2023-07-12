@@ -9,4 +9,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 4000
-CMD [ "node", "app.js", "config.js" ]
+CMD [ "node", "app.js"]
