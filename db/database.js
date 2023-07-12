@@ -1,5 +1,13 @@
 import mysql from 'mysql2';
-import { config } from '../config.js';
+
+export const config = {
+    db: {
+      host: "database-1.cghdvtao1swe.ap-northeast-2.rds.amazonaws.com",
+      user: "admin",
+      databse: "toys",
+      password: "nwmc1023!!",
+    },
+  };
 
 const pool = mysql.createPool({
   host: config.db.host,
