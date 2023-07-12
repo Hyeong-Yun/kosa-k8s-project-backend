@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql from 'mysql2';
 
 export const config = {
     db: {
@@ -9,13 +9,13 @@ export const config = {
     },
   };
 
-const connection  = mysql.createConnection({
+const pool = mysql.createConnection({
   host: config.db.host,
   user: config.db.user,
   database: config.db.databse,
   password: config.db.password,
 });
 
-connection.connect();
+pool.connect(); 
 
 export const db = pool.promise();
