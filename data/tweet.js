@@ -6,14 +6,14 @@ const ORDER_DESC = 'ORDER BY tw.createdAt DESC';
 
 export async function getAll() {
   return db
-    .execute(`SELECT * FROM proudcts`) 
+    .execute(`SELECT * FROM products`) 
     .then((result) => result[0]);
 }
 //${SELECT_JOIN} ${ORDER_DESC}
 
 export async function getAllByUsername(username) {
   return db
-    .execute(`SELECT * FROM proudcts`) //
+    .execute(`SELECT * FROM products`) //
     .then((result) => result[0]);
 }
 // ${SELECT_JOIN} WHERE username=? ${ORDER_DESC}`, [username]
