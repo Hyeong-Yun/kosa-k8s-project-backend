@@ -31,7 +31,9 @@ export async function login(req, res) {
   if (!user) {
     return res.status(401).json({ message: 'Invalid user or password' });
   }
-  
+  res.status(200).json({ user });
+
+}
 //   const isValidPassword = await bcrypt.compare(password, user.password);
 //   if (!isValidPassword) {
 //     return res.status(401).json({ message: 'Invalid user or password' });
@@ -39,7 +41,6 @@ export async function login(req, res) {
 
 //   const token = createJwtToken(user.id);
 //   res.status(200).json({ token, username });
-}
 
 // function createJwtToken(id) {
 //   return jwt.sign({ id }, jwtSecretKey, { expiresIn: jwtExpiresInDays });
@@ -50,5 +51,5 @@ export async function login(req, res) {
 //   if (!user) {
 //     return res.status(404).json({ message: 'User not found' });
 //   }
-//   res.status(200).json({ token: req.token, username: user.username });
-// }
+   
+
