@@ -13,7 +13,7 @@ app.use(cors());
 app.use(morgan('tiny'));
 
 app.use('/products', tweetRouter);
-// app.use('/auth', authRouter);
+app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
     res.sendStatus(404);
