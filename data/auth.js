@@ -19,5 +19,5 @@ export async function createUser(user) {
       'INSERT INTO users (username, password, email) VALUES (?,?,?)',
       [username, password, email]
     )
-    .then((result) => result[0])
+    .then((result) => result[0].insertId)
 }

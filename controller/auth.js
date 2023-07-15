@@ -22,7 +22,7 @@ export async function signup(req, res) {
   });
   
 //   const token = createJwtToken(userId);
-//   res.status(201).json({ token, username });
+   res.status(201).json({ username });
 }
 
 export async function login(req, res) {
