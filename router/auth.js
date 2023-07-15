@@ -29,7 +29,7 @@ const validateSignup = [
   validate,
 ];
 
-router.post('/signup',  authController.signup);
+router.post('/signup', validateSignup, authController.signup);
 
 router.post('/login', validateCredential, authController.login);
 
