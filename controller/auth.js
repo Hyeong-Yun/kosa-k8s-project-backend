@@ -9,7 +9,7 @@ import * as userRepository from '../data/auth.js';
 // const bcryptSaltRounds = 12;
 
 export async function signup(req, res) {
-  const { username, password, email } = req.body;
+  const { username, password, email, phoneNumber, birthNumber, birthDate } = req.body;
   const found = await userRepository.findByUsername(username);
   if (found) {
     return res.status(409).json({ message: `${username} already exists` });
@@ -19,6 +19,9 @@ export async function signup(req, res) {
     username,
     password,
     email,
+    phoneNumber,
+    birthNumber,
+    birthDate
   });
   
 //   const token = createJwtToken(userId);
